@@ -116,26 +116,34 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        try:
-            # Parse the parameters.
-            for param in params.split(' '):
-                key, value = param.split('=')
-                if value.startswith('"'):
-                    value = value[1:-1].replace('\\"', '"').replace('_', ' ')
-                elif '.' in value:
-                    value = float(value)
-                else:
-                    value = int(value)
-                    params[key] = value
+        off_equal_sign = args.replace("=", " ")
+        """ Replace '=' with space"""
+        arg_list = off_equal_sign.split()
+        if not arg_list[0]:
+            print("** class name missing **")
+            return
+        elif arg_list[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
 
-            # Create the new object.
-            cls = getattr(models, arg)
-            new_object = cls(**params)
-            new_object.save()
-
-        except Exception as e:
-                print(e)
-                return
+        new_instance = HBNBCommand.classes[arg_list[0]]()
+        key_str = []
+        value_str = []
+        dict_attr = {}
+        """" Replace '_' with space, delete all backslashs:"""
+        for i in range(1, len(arg_list)):
+            if i % 2 > 0:
+                key_str.append(arg_list[i])
+            elif type(arg_list[i]) is str:
+                tmp_list = arg_list[i].replace("_", " ")
+                new_list = tmp_list.replace("\"", "")
+                value_str.append(new_list)
+        """ Set new_instance with new key and value pairs"""
+        for j in range(len(key_str)):
+            dict_attr[key_str[j]] = value_str[j]
+            setattr(new_instance, key_str[j], value_str[j])
+        print(new_instance.id)
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
