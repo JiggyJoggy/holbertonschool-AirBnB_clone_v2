@@ -9,6 +9,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 
+
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
@@ -19,7 +20,7 @@ class FileStorage:
         if cls is not None:
             obj_class = {}
             for key, obj in self.__objects.items():
-                if isinstance(obj,cls):
+                if isinstance(obj, cls):
                     obj_class[key] = obj
             return obj_class
         else:
@@ -62,7 +63,7 @@ class FileStorage:
                     self.__objects[key] = value
         except FileNotFoundError:
             pass
-    
+
     def delete(self, obj=None):
         """ Deletes object from __objects if it exists """
         if obj and obj in self.__objects.values():
