@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Console Module """
+""" This is the documentation on Console module """
 import cmd
 import sys
 from models.base_model import BaseModel
@@ -10,7 +10,6 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-from datetime import datetime
 
 
 class HBNBCommand(cmd.Cmd):
@@ -74,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] =='}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -125,7 +124,6 @@ class HBNBCommand(cmd.Cmd):
         elif arg_list[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-
         new_instance = HBNBCommand.classes[arg_list[0]]()
         key_str = []
         value_str = []
@@ -218,7 +216,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        print_list = []
+        '''print_list = []
 
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
@@ -232,7 +230,14 @@ class HBNBCommand(cmd.Cmd):
             for k, v in storage._FileStorage__objects.items():
                 print_list.append(str(v))
 
-        print(print_list)
+        print(print_list)'''
+        cls = None
+        if args:
+            cls = args.split(' ')[0]  # remove possible trailing args
+            if cls not in HBNBCommand.classes:
+                return print("** class doesn't exist **")
+        objs = storage.all(cls)
+        print([str(v) for v in objs.values()])
 
     def help_all(self):
         """ Help information for the all command """
@@ -291,7 +296,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -299,10 +304,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
@@ -333,26 +338,6 @@ class HBNBCommand(cmd.Cmd):
                 new_dict.__dict__.update({att_name: att_val})
 
         new_dict.save()  # save updates to file
-
-    def update(self, args):
-        """ Updates an object with new information.
-
-            Args: args: A list of arguments, including class name, object ID, attribute name, and attribute value.
-
-            Returns:
-            None. """
-
-	# Check if the object exists.
-        if not storage.exists(args[0], args[1]):
-            print("** object does not exist **")
-            return
-
-	# Update the object's attributes.
-        new_dict = storage.all()[args[0]][args[1]]
-        new_dict.__dict__.update({args[2]: args[3]})
-
-	# Save the changes to the object.
-        new_dict.save()
 
     def help_update(self):
         """ Help information for the update class """
