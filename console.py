@@ -117,25 +117,25 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class"""
         try:
-	# Parse the parameters.
-	for param in params.split(' '):
-	    key, value = param.split('=')
-	if value.startswith('"'):
-            value = value[1:-1].replace('\\"', '"').replace('_', ' ')
-	elif '.' in value:
-            value = float(value)
-	else:
-            value = int(value)
-	    params[key] = value
+            # Parse the parameters.
+            for param in params.split(' '):
+                key, value = param.split('=')
+                if value.startswith('"'):
+                    value = value[1:-1].replace('\\"', '"').replace('_', ' ')
+                elif '.' in value:
+                    value = float(value)
+                else:
+                    value = int(value)
+                    params[key] = value
 
-	# Create the new object.
-	cls = getattr(models, arg)
-	new_object = cls(**params)
-	new_object.save()
+            # Create the new object.
+            cls = getattr(models, arg)
+            new_object = cls(**params)
+            new_object.save()
 
-	except Exception as e:
-	    print(e)
-	    return
+        except Exception as e:
+                print(e)
+                return
 
     def help_create(self):
         """ Help information for the create method """
@@ -327,24 +327,24 @@ class HBNBCommand(cmd.Cmd):
         new_dict.save()  # save updates to file
 
     def update(self, args):
-	""" Updates an object with new information.
+        """ Updates an object with new information.
 
-	Args: args: A list of arguments, including class name, object ID, attribute name, and attribute value.
+            Args: args: A list of arguments, including class name, object ID, attribute name, and attribute value.
 
-	Returns:
-	None. """
+            Returns:
+            None. """
 
 	# Check if the object exists.
-	if not storage.exists(args[0], args[1]):
-	print("** object does not exist **")
-	return
+        if not storage.exists(args[0], args[1]):
+            print("** object does not exist **")
+            return
 
 	# Update the object's attributes.
-	new_dict = storage.all()[args[0]][args[1]]
-	new_dict.__dict__.update({args[2]: args[3]})
+        new_dict = storage.all()[args[0]][args[1]]
+        new_dict.__dict__.update({args[2]: args[3]})
 
 	# Save the changes to the object.
-	new_dict.save()
+        new_dict.save()
 
     def help_update(self):
         """ Help information for the update class """
