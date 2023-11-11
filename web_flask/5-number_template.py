@@ -4,8 +4,7 @@ display "C", followed by the value of the text variable
 display "Python", followed by the value of the text variable
 The default value of text is “is cool”
 display “n is a number” only if n is an integer
-display a HTML page only if n is an integer
-"""
+display a HTML page only if n is an integer"""
 from flask import Flask
 from flask import render_template
 
